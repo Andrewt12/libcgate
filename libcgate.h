@@ -70,5 +70,5 @@ void cgate_measurement_register_handler(void (*f)(uint8_t,
 
 int32_t cgate_set_group(int sockfd, uint8_t net, uint8_t app, uint8_t group, uint8_t value);
 int32_t cgate_set_ramp(int sockfd, uint8_t net, uint8_t app, uint8_t group, uint8_t value, uint8_t ramprate);
-
+int32_t cgate_send_measurement(int sockfd, uint8_t net, uint8_t app, uint8_t device, uint8_t channel, int32_t value, int8_t exponent, cbus_measurement_unit_type);
 #endif

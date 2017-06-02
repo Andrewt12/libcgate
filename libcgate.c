@@ -123,6 +123,19 @@ int32_t cgate_set_ramp(int sockfd, uint8_t net, uint8_t app, uint8_t group, uint
     return -1;
 }
 
+int32_t cgate_send_measurement(int sockfd, uint8_t net, uint8_t app, uint8_t device, uint8_t channel, int32_t value, int8_t exponent, cbus_measurement_unit_type units)
+{
+    char buf[255];
+    sprintf(buf, "measurement data %d/%d/%d/%d %d %d %d\r", net, app, device, channel, value, exponent, units);
+    if(write(sockfd,buf,strlen(buf)) < 0)
+        return -1;
+    if(cgate_get_ok(sockfd))
+        return 0;
+    DEBUG_PRINT("Failed to set group\n");
+    return -1;
+
+}
+
 void cgate_process_lighting_event(uint8_t *buf)
 {
     char *ret, *ptr;
@@ -213,16 +226,14 @@ void cgate_process_lighting_event(uint8_t *buf)
         if((void (*)(void))cgate_lighting_event_handler)
             cgate_lighting_event_handler(net,application,group,value,ramp);
     }
-
-
-//measurement data
 }
 
 void cgate_process_measurement_event(uint8_t *buf)
 {
     char *ret, *ptr;
     long val;
-    u_int8_t net, device, channel, application, exponent;
+    int8_t exponent;
+    u_int8_t net, device, channel, application;
     char project[32];
     int32_t i, value;
     cbus_measurement_unit_type type;
@@ -253,12 +264,12 @@ void cgate_process_measurement_event(uint8_t *buf)
         ret = strstr((const char*)ret," ");
         ret++;
         val = strtol((const char*)ret,&ptr,10);
-        value = (u_int8_t)val;
+        value = (int32_t)val;
         DEBUG_PRINT("VALUE = %d\n",(int)val);
         ret = strstr((const char*)ret," ");
         ret++;
         val = strtol((const char*)ret,&ptr,10);
-        exponent = (u_int8_t)val;
+        exponent = (int8_t)val;
         DEBUG_PRINT("EXPONENT  = %d\n",(int)val);
         ret = strstr((const char*)ret," ");
         ret++;
