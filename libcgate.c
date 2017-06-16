@@ -113,6 +113,22 @@ int32_t cgate_get_ok(int sockfd)
     return 1;
 }
 
+int32_t cgate_text_label(int sockfd, uint8_t net, uint8_t app, uint8_t group, int8_t* value)
+{
+    char buf[255];
+    /* hard code language 1 english */
+    sprintf(buf, "lighting label %d/%d 1 %d - text %s\r", net, app, group, value);
+    printf("BUFFER %s\n", buf);
+    if(write(sockfd,buf,strlen(buf)) < 0)
+        return -1;
+    if(!cgate_get_ok(sockfd))
+        return 0;
+    DEBUG_PRINT("Failed to set label\n");
+    return -1;
+
+
+}
+
 int32_t cgate_set_group(int sockfd, uint8_t net, uint8_t app, uint8_t group, uint8_t value)
 {
     char buf[255];

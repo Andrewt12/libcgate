@@ -65,9 +65,9 @@ typedef enum
     cbus_measurement_ce_custom
   } cbus_measurement_unit_type;
 
-//
-// Connect to Cgate server. Takes IP, Port, project string and network number.
-// Returns a socket to be used in all other commands
+
+/* Connect to Cgate server. Takes IP, Port, project string and network number.
+ * Returns a socket to be used in all other commands                           */
 
 int32_t cgate_connect(char* ip, int portno, int8_t *project, uint8_t net);
 
@@ -89,4 +89,7 @@ void cgate_measurement_register_handler(void (*f)(uint8_t,
 int32_t cgate_set_group(int sockfd, uint8_t net, uint8_t app, uint8_t group, uint8_t value);
 int32_t cgate_set_ramp(int sockfd, uint8_t net, uint8_t app, uint8_t group, uint8_t value, uint8_t ramprate);
 int32_t cgate_send_measurement(int sockfd, uint8_t net, uint8_t app, uint8_t device, uint8_t channel, int32_t value, int8_t exponent, cbus_measurement_unit_type);
+/* Write a text label to a dlt or edlt.
+ * value is a text string you want displayed */
+int32_t cgate_text_label(int sockfd, uint8_t net, uint8_t app, uint8_t group, int8_t* value);
 #endif
