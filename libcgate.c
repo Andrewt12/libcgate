@@ -139,7 +139,7 @@ int32_t cgate_set_group(int sockfd, uint8_t net, uint8_t app, uint8_t group, uin
 
     if(write(sockfd,buf,strlen(buf)) < 0)
         return -1;
-    if(cgate_get_ok(sockfd))
+    if(!cgate_get_ok(sockfd))
         return 0;
     DEBUG_PRINT("Failed to set group\n");
     return -1;
@@ -151,7 +151,7 @@ int32_t cgate_set_ramp(int sockfd, uint8_t net, uint8_t app, uint8_t group, uint
     sprintf(buf, "ramp %d/%d/%d %d %d\r", net, app, group, value, ramprate);
     if(write(sockfd,buf,strlen(buf)) < 0)
         return -1;
-    if(cgate_get_ok(sockfd))
+    if(!cgate_get_ok(sockfd))
         return 0;
     DEBUG_PRINT("Failed to set group\n");
     return -1;
@@ -163,7 +163,7 @@ int32_t cgate_send_measurement(int sockfd, uint8_t net, uint8_t app, uint8_t dev
     sprintf(buf, "measurement data %d/%d/%d/%d %d %d %d\r", net, app, device, channel, value, exponent, units);
     if(write(sockfd,buf,strlen(buf)) < 0)
         return -1;
-    if(cgate_get_ok(sockfd))
+    if(!cgate_get_ok(sockfd))
         return 0;
     DEBUG_PRINT("Failed to set group\n");
     return -1;
