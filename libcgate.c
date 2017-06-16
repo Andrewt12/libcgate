@@ -336,6 +336,12 @@ int cgate_connect(char* ip, int portno, int8_t *project, uint8_t net)
     struct sockaddr_in serverAddr, serverAddr2;
     pthread_t sig_thr_id;
 
+    /* Close sockets if doing a reconnect */
+    if(sockfd)
+        close(sockfd);
+    if(eventfd)
+        close(eventfd);
+
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) 
         DEBUG_PRINT("ERROR opening socket");
